@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Booking Confirmation</title>
+</head>
+<body>
+    <h2>Hi {{ user.username }},</h2>
+    <p>Your booking has been confirmed. Here are the details:</p>
+
+    {% for booking in bookings %}
+        <div>
+            <h3>Movie: {{ booking.movie.name }}</h3>
+            <p>Theater: {{ booking.theater.name }}</p>
+            <p>Seat: {{ booking.seat.seat_number }}</p>
+            <p>Time: {{ booking.theater.time }}</p>
+        </div>
+    {% endfor %}
+
+    <p>Thank you for using BookMySeat!</p>
+</body>
+</html>
