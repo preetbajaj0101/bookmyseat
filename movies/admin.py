@@ -1,9 +1,12 @@
 from django.contrib import admin
-from .models import Movie, Theater, Seat,Booking
+from .models import Movie, Theater, Seat, Booking, Genre
+
+admin.site.register(Genre)
 
 @admin.register(Movie)
 class MovieAdmin(admin.ModelAdmin):
-    list_display = ['name', 'rating', 'cast','description', 'genre', 'language']
+    list_display = ['name', 'rating', 'cast', 'description', 'language']
+    filter_horizontal = ('genres',)
 
 @admin.register(Theater)
 class TheaterAdmin(admin.ModelAdmin):
@@ -15,4 +18,4 @@ class SeatAdmin(admin.ModelAdmin):
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ['user', 'seat', 'movie','theater','booked_at']
+    list_display = ['user', 'seat', 'movie', 'theater', 'booked_at']
