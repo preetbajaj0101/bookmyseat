@@ -22,6 +22,27 @@
                         </button>
                     </div>
                 </div>
+                <div class="form-row mt-3">
+                    <div class="form-group col-md-6">
+                        <label for="genre">Genre</label>
+                        <select name="genre" id="genre" class="form-control">
+                            <option value="">All Genres</option>
+                            {% for genre_value, genre_display in genres %}
+                                <option value="{{ genre_value }}" {% if selected_genre == genre_value %}selected{% endif %}>{{ genre_display }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="language">Language</label>
+                        <select name="language" id="language" class="form-control">
+                            <option value="">All Languages</option>
+                            {% for lang_value, lang_display in languages %}
+                                <option value="{{ lang_value }}" {% if selected_language == lang_value %}selected{% endif %}>{{ lang_display }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
             </form>
         </div>
     </div>
@@ -57,12 +78,10 @@
     </div>
 </div>
 
-<!-- Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
 <style>
@@ -95,17 +114,11 @@
                 }
             });
         });
+
+        // Submit form on filter change
+        $('#genre, #language').on('change', function() {
+            $(this).closest('form').submit();
+        });
     });
 </script>
-<!-- <h1>Movies</h1>
-<ul>
-    {% for movie in movies%}
-    <li>
-        <img src="{{movie.image.url}}" alt="image" >
-        <strong>{{movie.name}}</strong>{{movie.rating}}
-        <p>Cast:{{movie.cast}}</p>
-        <a href="{% url 'theater_list' movie.id %}">View Theaters</a>
-    </li>
-    {% endfor %}
-</ul> -->
 {% endblock %}
