@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', 'localhost', ]
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -141,3 +142,20 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # For developme
 # EMAIL_HOST_USER = 'apikey' # this is the literal string 'apikey' for SendGrid
 # EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_API_KEY')
 # DEFAULT_FROM_EMAIL = 'your-email@example.com'
+JAZZMIN_SETTINGS = {
+    "site_title": "BookMySeat Admin",
+    "site_header": "BookMySeat",
+    "site_brand": "BookMySeat",
+    "site_logo": "path/to/your/logo.png", # Optional: Add a path to a logo
+    "welcome_sign": "Welcome to the BookMySeat Admin Panel",
+    "copyright": "BookMySeat Ltd.",
+    "search_model": ["auth.User", "movies.Movie"],
+    "topmenu_links": [
+        {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "View Site", "url": "/", "new_window": True},
+        {"model": "auth.User"},
+        {"app": "movies"},
+    ],
+    "show_sidebar": True,
+    "navigation_expanded": True,
+}
