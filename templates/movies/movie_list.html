@@ -1,0 +1,124 @@
+{% extends "users/basic.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">Movies</h1>
+
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-8">
+            <form method="GET" action="{% url 'movie_list' %}" class="search-bar">
+                <div class="input-group">
+                    <input
+                        class="form-control form-control-lg"
+                        name="search"
+                        placeholder="Search for Movies, Events, Plays, Sports and Activities"
+                        type="text"
+                        value="{{ request.GET.search|default_if_none:'' }}"
+                        aria-label="Search for movies"
+                    />
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-8">
+                                <label for="genre" class="font-weight-bold">Genre</label>
+                                <div class="genre-pills">
+                                    <a href="{% url 'movie_list' %}" class="btn btn-sm {% if not selected_genres %}btn-primary{% else %}btn-outline-secondary{% endif %}">All Genres</a>
+                                    {% for genre in genres %}
+                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                        <input type="checkbox" class="custom-control-input" id="genre-{{ genre.id }}" name="genre" value="{{ genre.name }}" {% if genre.name in selected_genres %}checked{% endif %}>
+                                        <label class="custom-control-label" for="genre-{{ genre.id }}">{{ genre.name }}</label>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="language" class="font-weight-bold">Language</label>
+                                <select name="language" id="language" class="form-control">
+                                    <option value="">All Languages</option>
+                                    {% for lang_value, lang_display in languages %}
+                                        <option value="{{ lang_value }}" {% if selected_language == lang_value %}selected{% endif %}>{{ lang_display }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group text-right mb-0">
+                            <button class="btn btn-success" type="submit">
+                                <i class="fas fa-filter"></i> Apply Filters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row" id="movieList">
+        {% for movie in movies %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ movie.image.url }}" class="card-img-top" alt="{{ movie.name }}" style="height: 300px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ movie.name }}</h5>
+                    <p class="card-text">
+                        <i class="fas fa-star text-warning"></i> {{ movie.rating }}
+                    </p>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            <i class="fas fa-users"></i> Cast: {{ movie.cast }}
+                        </small>
+                    </p>
+                </div>
+                <div class="card-footer bg-white border-top-0">
+                    <a href="{% url 'theater_list' movie.id %}" class="btn btn-outline-primary btn-block">
+                        View Theaters <i class="fas fa-chevron-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p class="lead">No movies found. Try a different search term.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<style>
+    .card {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+    }
+    .genre-pills .custom-control-label {
+        padding: .375rem .75rem;
+        border: 1px solid #dee2e6;
+        border-radius: .25rem;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+    }
+    .genre-pills .custom-control-input:checked ~ .custom-control-label {
+        background-color: #007bff;
+        color: #fff;
+        border-color: #007bff;
+    }
+    .genre-pills .custom-control-inline {
+        margin-right: .5rem;
+        margin-bottom: .5rem;
+    }
+</style>
+{% endblock %}

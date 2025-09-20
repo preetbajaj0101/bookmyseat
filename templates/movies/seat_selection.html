@@ -1,0 +1,119 @@
+{% extends "users/basic.html" %} {% block content %}
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-8 mx-auto">
+      <div class="card mb-4">
+        <div class="card-body">
+          <div
+            class="d-flex justify-content-between align-items-center flex-wrap"
+          >
+            <div>
+              <h4 class="card-title">{{ show.theater.movie.name }}</h4>
+              <p class="card-text text-muted">
+                {{ show.theater.name }} | {{ show.time|date:"F d, Y, P" }} |
+                {{ show.auditorium.name }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% if error %}
+      <div class="alert alert-danger" role="alert">{{ error }}</div>
+      {% endif %}
+
+      <div class="card">
+        <div class="card-body text-center">
+          <h5 class="card-title mb-4">Select Your Seats</h5>
+          <div class="screen mb-4">All eyes this way please!</div>
+
+          <form method="POST">
+            {% csrf_token %}
+            <div class="seating-area">
+              {% for row_letter, seats_in_row in seat_rows %}
+              <div class="seat-row">
+                {% for seat in seats_in_row %}
+                <div class="seat-wrapper">
+                  <input
+                    type="checkbox"
+                    name="seats"
+                    value="{{ seat.id }}"
+                    id="seat-{{ seat.id }}"
+                    class="seat-checkbox"
+                    {% if seat.is_booked %}disabled{% endif %}
+                  />
+                  <label
+                    for="seat-{{ seat.id }}"
+                    class="seat-label {% if seat.is_booked %}sold{% else %}{{ seat.tier|lower }}{% endif %}"
+                  >
+                    {{ seat.seat_number }}
+                  </label>
+                </div>
+                {% endfor %}
+              </div>
+              {% endfor %}
+            </div>
+
+            <div class="d-flex justify-content-center my-4 flex-wrap">
+              <div class="d-flex align-items-center me-3 mb-2">
+                <div class="seat-label legend platinum"></div>
+                <span class="ms-2">Platinum - ₹300</span>
+              </div>
+              <div class="d-flex align-items-center me-3 mb-2">
+                <div class="seat-label legend gold"></div>
+                <span class="ms-2">Gold - ₹200</span>
+              </div>
+              <div class="d-flex align-items-center me-3 mb-2">
+                <div class="seat-label legend silver"></div>
+                <span class="ms-2">Silver - ₹150</span>
+              </div>
+              <div class="d-flex align-items-center me-3 mb-2">
+                <div class="seat-label legend selected"></div>
+                <span class="ms-2">Selected</span>
+              </div>
+              <div class="d-flex align-items-center mb-2">
+                <div class="seat-label legend sold"></div>
+                <span class="ms-2">Sold</span>
+              </div>
+            </div>
+
+            <div class="text-center">
+              <button type="submit" class="btn btn-success btn-lg">
+                Book Selected Seats
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .screen { background-color: #6c757d; color: white; padding: 10px; border-radius: 5px; }
+  .seating-area { display: flex; flex-direction: column; align-items: center; }
+  .seat-row { display: flex; align-items: center; justify-content: center; margin-bottom: 5px; }
+  .seat-wrapper { margin: 1px; } /* Reduced space between seats */
+  .seat-checkbox { display: none; }
+  .seat-label {
+    display: flex; justify-content: center; align-items: center;
+    width: 24px; /* Smaller seat width */
+    height: 24px; /* Smaller seat height */
+    border-radius: 3px; cursor: pointer;
+    font-size: 9px; /* Smaller font */
+    font-weight: bold; transition: all 0.2s;
+  }
+  .seat-label.platinum { border: 1px solid #8e44ad; color: #8e44ad; }
+  .seat-label.gold { border: 1px solid #f1c40f; color: #f1c40f; }
+  .seat-label.silver { border: 1px solid #7f8c8d; color: #7f8c8d; }
+  .seat-label.sold { background-color: #bdc3c7; border-color: #bdc3c7; color: #7f8c8d; cursor: not-allowed; }
+  .seat-checkbox:checked + .seat-label { background-color: #2ecc71; border-color: #2ecc71; color: white; }
+  .seat-label:not(.sold):hover { transform: scale(1.1); }
+  .legend { width: 20px; height: 20px; cursor: default; } /* Smaller legend */
+  .legend.platinum { border-color: #8e44ad; }
+  .legend.gold { border-color: #f1c40f; }
+  .legend.silver { border-color: #7f8c8d; }
+  .legend.selected { background-color: #2ecc71; border-color: #2ecc71; }
+  .legend.sold { background-color: #bdc3c7; border-color: #bdc3c7; }
+</style>
+{% endblock %}
