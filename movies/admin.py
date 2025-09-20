@@ -12,6 +12,7 @@ admin.site.register(Auditorium)
 @admin.register(Movie)
 class MovieAdmin(admin.ModelAdmin):
     list_display = ('name', 'rating', 'language')
+    list_filter = ('genres', 'language')
     filter_horizontal = ('genres',)
 
 @admin.register(Theater)
@@ -101,3 +102,4 @@ class SeatAdmin(admin.ModelAdmin):
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
     list_display = ('user', 'seat', 'movie', 'show', 'booked_at')
+    list_filter = ('show__theater', 'booked_at')
